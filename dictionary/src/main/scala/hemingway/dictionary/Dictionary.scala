@@ -155,7 +155,7 @@ abstract class Dictionary {
 
   private def directlyPut(str: String, payload: Map[String, String]) = {
     val feature = new NGram.Feature(str.toLowerCase, ngramN)
-    persistence.put(feature, payload + ("form" -> feature.str))
+    persistence.put(feature, payload + ("form" -> str))
   }
 
 }
