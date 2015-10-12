@@ -17,6 +17,7 @@ trait DictionaryPersistence {
   def getExact(str: String): Option[Long]
   def put(feature: NGram.Feature, payload: Map[String, String]): Long
   def resolvePayload(id: JLong): Option[Map[String, String]]
+  def entries: Iterator[(String, Map[String, String])]
 
   protected def strHash(str: String) = MurmurHash3.stringHash(str, str.length)
 }

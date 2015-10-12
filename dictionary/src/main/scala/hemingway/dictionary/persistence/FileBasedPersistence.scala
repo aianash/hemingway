@@ -120,6 +120,8 @@ class FileBasedPersistence(db: DB) extends DictionaryPersistence {
 
   def resolvePayload(id: JLong) = Option(payloads.get(id))
 
+  def entries = payloads.iterator.map(x => x._2("form") -> x._2)
+
   private def isIndex(name: String) = name.contains(INDEX_NAME_PREFIX)
   private def isIndexCount(name: String) = name.contains(INDEX_COUNT_PREFIX)
 

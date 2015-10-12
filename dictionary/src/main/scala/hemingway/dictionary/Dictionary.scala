@@ -69,6 +69,12 @@ abstract class Dictionary {
   def add(str: String, payload: Map[String, String]) =
     persistence.getExact(str.toLowerCase) getOrElse directlyPut(str, payload)
 
+  /** Description of function
+    *
+    * @param Parameter1 - blah blah
+    * @return Return value - blah blah
+    */
+  def entries = persistence.entries
 
   /** Get Payload of the string (with exact match)
     *
@@ -129,17 +135,18 @@ abstract class Dictionary {
     }
 
     var results = new ObjectRBTreeSet[Entry](scoreOrdering)
+    val removals = new LongRBTreeSet
 
     for(k <- (ordered.size - tau + 1) to (ordered.size - 1)) {
-      for(entryId <- counts.keySet) {
+      for(entryId <- counts.keySet if !removals.contains(entryId)) {
         if(persistence.get(l, ordered(k)).contains(entryId)) counts.addTo(entryId, 1)
         val count = counts.get(entryId)
         if(tau <= count) {
           val score = scorer.score(count.toInt, feature.size, l)
           val entry = new Entry(entryId, score)
           results.add(entry)
-          counts.remove(entryId)
-        } else if((count + ordered.size - k - 1) < tau) counts.remove(entryId)
+          removals.add(entryId)
+        } else if((count + ordered.size - k - 1) < tau) removals.add(entryId)
       }
     }
 

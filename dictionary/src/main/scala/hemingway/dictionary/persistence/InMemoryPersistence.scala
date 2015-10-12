@@ -51,4 +51,6 @@ class InMemoryPersistence extends DictionaryPersistence {
   }
 
   def resolvePayload(id: JLong) = payloads.get(id)
+
+  def entries = payloads.iterator.map(x => x._2("form") -> x._2)
 }
