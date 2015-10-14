@@ -179,20 +179,20 @@ case class InMemoryDictionary(ngramN: Int = Dictionary.DEFAULT_NGRAM_N) extends 
 
 /** File based dictionary. Internally it uses mapdb.
   */
-class FileBasedDictionary private (db: DB) extends Dictionary {
+class FileBasedDictionary private (val dictionaryName: String, db: DB) extends Dictionary {
   val atomicNgramN = db.atomicInteger("ngramN")
   atomicNgramN.compareAndSet(0, Dictionary.DEFAULT_NGRAM_N)
 
   val ngramN = atomicNgramN.get
-  val persistence = new FileBasedPersistence(db)
+  val persistence = new FileBasedPersistence(dictionaryName, db)
 }
 
 
 object FileBasedDictionary {
 
-  def apply(db: DB) = new FileBasedDictionary(db)
+  def apply(dictionaryName: String, db: DB) = new FileBasedDictionary(dictionaryName, db)
 
-  def apply(dbPath: String) = new FileBasedDictionary(mkDB(dbPath))
+  def apply(dictionaryName: String, dbPath: String) = new FileBasedDictionary(dictionaryName, mkDB(dbPath))
 
   private def mkDB(dbPath: String) =
     DBMaker.fileDB(new File(dbPath))

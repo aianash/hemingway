@@ -25,13 +25,13 @@ import it.unimi.dsi.fastutil.longs.LongRBTreeSet
  *
  * @param db mapdb instance
  */
-class FileBasedPersistence(db: DB) extends DictionaryPersistence {
+class FileBasedPersistence(dictionaryName: String, db: DB) extends DictionaryPersistence {
 
-  private val INDEX_NAME_PREFIX = "_idx_"
-  private val INDEX_COUNT_PREFIX = "_idxcount_"
-  private val PAYLOAD_COLL_NAME = "payloads"
-  private val HASH_INDEX_NAME = "hashidx"
-  private val UNIQUE_INCR_KEY = "incr_key"
+  private val INDEX_NAME_PREFIX  = dictionaryName + "_idx_"
+  private val INDEX_COUNT_PREFIX = dictionaryName + "_idxcount_"
+  private val PAYLOAD_COLL_NAME  = dictionaryName + "_payloads"
+  private val HASH_INDEX_NAME    = dictionaryName + "_hashidx"
+  private val UNIQUE_INCR_KEY    = dictionaryName + "_incr_key"
 
   private val records = db.getAll
 
